@@ -1,9 +1,10 @@
 import numpy as np
-import Tokeniser as tk
+import w2vHelperModule as tk
 import BinaryClassifiers as bcs
 
 corpus = np.loadtxt("testText", dtype=str)
-tokens = tk.tokeniseCorpus(corpus)
+helper = tk.Word2VecHelper(corpus)
+tokens = helper.getTokens()
 print("dimension of corpus", corpus.shape)
 print("tokens size : ", len(tokens))
 
