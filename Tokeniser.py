@@ -1,10 +1,11 @@
+import numpy as np
+
 class SimpleTokeniser:
-    def fromDataset(self, context: set[str]):
+    def tokeniseCorpus(self, corpus: np.ndarray) -> dict:
         tokens = {}
         counter = 0
-
-        for sample in context:
-            for word in sample.split():
+        for sentence in corpus:
+            for word in sentence.split():
                 if word not in tokens:
                     tokens.update({word : counter + 1})
                     counter += 1
