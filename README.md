@@ -21,6 +21,10 @@ To use the model, create a new instance of the Word2Vec object, and optionally p
 ```
 Then, call `train()` method, with text corpus as an input. Run the Python script. The model automatically saves itself after it finishes training. To get a specific embedding call `getEmbeddingOf()`, with a desired string.
 
+## Built using
+
+* numpy
+
 ## References and Acknowledgments
 
 Thanks to [Dr. Chiraag Lala](https://www.linkedin.com/in/chiraagrlala/) for his explanation of the concept. 
