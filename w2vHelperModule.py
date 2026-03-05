@@ -15,14 +15,18 @@ class Word2VecHelper:
                     unigram_frequency[word] += 1
 
         vocab_size = len(self.tokens)
-        frequency_arr = np.zeros(vocab_size + 1)
+        frequency_arr = np.zeros(vocab_size)
 
         # "map" the word ids to their frequencies
         for word, idx in self.tokens.items():
-            frequency_arr[idx] = unigram_frequency[word]
+            frequency_arr[idx-1] = unigram_frequency[word]
         smoothed_frequency_arr = frequency_arr ** 0.75
-        self.unigram_distribution = smoothed_frequency_arr / np.sum(frequency_arr)
+        self.unigram_distribution = smoothed_frequency_arr / np.sum(smoothed_frequency_arr)
 
     def getNegativeSamples(self, number_of_samples: int) -> np.ndarray:
         return np.random.choice(len(self.tokens), number_of_samples, p=self.unigram_distribution)
     def getTokens(self) -> dict[str, int]: return self.tokens
+    def getId(self, target_word: str) -> int:
+        if self.tokens.get(target_word) is None:
+            return -1
+        return self.tokens[target_word]
