@@ -19,7 +19,13 @@ To use the model, create a new instance of the Word2Vec object, and optionally p
 * number_of_negative_samples : int
 * save_embeddings : bool
 ```
-Then, call `train()` method, with text corpus as an input. Run the Python script. The model automatically saves itself after it finishes training. To get a specific embedding call `getEmbeddingOf()`, with a desired string.
+Then, call `train()` method, with text corpus as an input. 
+
+Run the Python script. 
+
+The model automatically saves itself after it finishes training. 
+
+To get a specific embedding call `getEmbeddingOf()`, with a desired string.
 
 ## Built using
 
