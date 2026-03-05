@@ -27,4 +27,4 @@ Thanks to [Dr. Chiraag Lala](https://www.linkedin.com/in/chiraagrlala/) for his 
 
 Some links to resources I used for inspiration, and research: 
 * [nuric Blog](https://www.doc.ic.ac.uk/~nuric/posts/teaching/word-representations/)
-* Efficient Estimation of Word Representations in Vector Space, Mikolov et al., 2013, [Ref.](https://arxiv.org/abs/1301.3781)
+* _Efficient Estimation of Word Representations in Vector Space_, Mikolov et al., 2013, [Ref.](https://arxiv.org/abs/1301.3781)
