@@ -1,32 +1,18 @@
 import numpy as np
 
 class Word2VecHelper:
-    def __init__(self,corpus: np.ndarray):
+    def __init__(self,corpus_path: str):
         self.tokens : dict[str, int]= {}
-        unigram_frequency : dict[str, int] = {}
-        token_id = 0
-        for sentence in corpus:
-            for word in sentence.split():
-                if word not in self.tokens:
-                    unigram_frequency[word] = 1
-                    self.tokens.update({word : token_id + 1})
-                    token_id += 1
-                else:
-                    unigram_frequency[word] += 1
+        # read the corpus file
+        with open(corpus_path, "r") as f:
+            corpus_list = f.read().split()
 
-        vocab_size = len(self.tokens)
-        frequency_arr = np.zeros(vocab_size)
+        unique_words, counts = np.unique(corpus_list, return_counts=True)
+        self.corpus = np.array(corpus_list)
+        self.tokens = {word: idx for idx, word in enumerate(unique_words)}
 
-        # "map" the word ids to their frequencies
-        for word, idx in self.tokens.items():
-            frequency_arr[idx-1] = unigram_frequency[word]
-        smoothed_frequency_arr = frequency_arr ** 0.75
+        smoothed_frequency_arr = counts ** 0.75
         self.unigram_distribution = smoothed_frequency_arr / np.sum(smoothed_frequency_arr)
 
     def getNegativeSamples(self, number_of_samples: int) -> np.ndarray:
         return np.random.choice(len(self.tokens), number_of_samples, p=self.unigram_distribution)
-    def getTokens(self) -> dict[str, int]: return self.tokens
-    def getId(self, target_word: str) -> int:
-        if self.tokens.get(target_word) is None:
-            return -1
-        return self.tokens[target_word]
