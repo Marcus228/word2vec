@@ -29,22 +29,28 @@ class Word2Vec:
         token_map = self._helper_functions.tokens
         corpus = self._helper_functions.corpus
 
-        # initialise the buffers, which will hold the word ids, context ids and labels
-        target_buffer, context_buffer, label_buffer = [], [], []
-
         # initialise the word and context matrices
         np.random.seed(42)
         word_matrix = np.random.uniform(-0.5, 0.5, (len(token_map), self._embedding_dimension))
         context_matrix = np.random.uniform(-0.5, 0.5, (len(token_map), self._embedding_dimension))
 
+        print("Converting corpus strings to integer IDs...")
+        corpus_ids = np.array([token_map[w] for w in corpus], dtype=np.int32)
+
         # now we train the model
+        print("Starting training...")
         for epoch in range(self._epochs):
+            # initialise the buffers, which will hold the word ids, context ids and labels
+            target_buffer, context_buffer, label_buffer = [], [], []
+
             # iterate over the corpus
-            for target_index, target_word in enumerate(corpus):
-                target_word_id = token_map[target_word]
+            for target_index, target_word_id in enumerate(corpus_ids):
+                if target_index % 100000 == 0 and target_index > 0:
+                    progress = (target_index / len(corpus)) * 100
+                    print(f"Epoch {epoch}: {progress:.1f}% complete")
 
                 # get the positive and negative samples for this word
-                positive_pairs_ids = self.__getPositivePairsIds(target_index, token_map, corpus)
+                positive_pairs_ids = self.__getPositivePairsIds(target_index, corpus_ids)
                 negative_pairs_ids = self.__getNegativeSamplesIds()
 
                 # create the training data in the buffers
@@ -61,17 +67,22 @@ class Word2Vec:
                     batch_target_ids = np.concatenate(target_buffer)
                     batch_context_ids = np.concatenate(context_buffer)
                     batch_label_ids = np.concatenate(label_buffer)
+
                     self.__train_step(batch_target_ids, batch_context_ids, batch_label_ids, word_matrix, context_matrix)
+
                     target_buffer, context_buffer, label_buffer = [], [], []
+
 
             # have to include the last batch if it is not empty
             if len(target_buffer) > 0:
                 batch_target_ids = np.concatenate(target_buffer)
                 batch_context_ids = np.concatenate(context_buffer)
                 batch_label_ids = np.concatenate(label_buffer)
+
                 self.__train_step(batch_target_ids, batch_context_ids, batch_label_ids, word_matrix, context_matrix)
-                target_buffer, context_buffer, label_buffer = [], [], []
+
             print(f"Epoch {epoch} complete")
+
         print("Training complete")
 
         # at this point, the model is trained
@@ -104,13 +115,12 @@ class Word2Vec:
         np.add.at(context_matrix, contexts, context_gradients)
 
 
-    def __getPositivePairsIds(self, target_word_index : int, token_map: dict, corpus: np.ndarray) -> np.ndarray:
+    def __getPositivePairsIds(self, target_word_index : int, corpus_ids: np.ndarray) -> np.ndarray:
         lower_bound = max(0, target_word_index - self._window_size)
-        upper_bound = min(len(corpus), target_word_index + self._window_size + 1)
-        window_words = corpus[lower_bound:upper_bound]
-        window_words = np.delete(window_words, (target_word_index - lower_bound))
-        word_ids = np.array([token_map[word] for word in window_words])
-        return word_ids
+        upper_bound = min(len(corpus_ids), target_word_index + self._window_size + 1)
+        window_ids = corpus_ids[lower_bound:upper_bound]
+        window_ids = np.delete(window_ids, (target_word_index - lower_bound))
+        return window_ids
 
     def __getNegativeSamplesIds(self) -> np.ndarray:
         return self._helper_functions.getNegativeSamples(self._number_of_negative_samples)
