@@ -27,9 +27,9 @@ To get a specific embedding call `getEmbeddingOf()`, with a desired string. <br 
 
 ## Visualisation of Results
 The repo also contains a `VisualiserScript.py` file. It requires a couple of files to be present in the same location as itself. Those include:
-*`word_embeddings.npy`
-*`tokens_map.npy`
-*`unigram_frequency.npy`
+* `word_embeddings.npy`
+* `tokens_map.npy`
+* `unigram_frequency.npy`
 
 The repo contains the previously mentioned files for a 650000 word Wiki scrape text data.
 
