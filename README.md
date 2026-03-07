@@ -20,20 +20,31 @@ To use the model, create a new instance of the Word2Vec object, and optionally p
 * save_embeddings : bool
 ```
 Then, call `train()` method, with text corpus as an input. 
-
 Run the Python script. 
-
 The model automatically saves itself after it finishes training. 
-
 To get a specific embedding call `getEmbeddingOf()`, with a desired string.
 
+
+## Visualisation of Results
+The repo also contains a `VisualiserScript.py` file. It requires a couple of files to be present in the same location as itself. Those include:
+*`word_embeddings.npy`
+*`tokens_map.npy`
+*`unigram_frequency.npy`
+
+The repo contains the previously mentioned files for a 650000 word Wiki scrape text data.
+
+Note that the model generates initial embedding data during training using `numpy.random.uniform` with a pre-defined seed of 42.
+
+## Technical details
+The network has been optimised to leverage the vectorisation feature that numpy provides.
 ## Built using
 
 * numpy
+* python
 
 ## References and Acknowledgments
 
-Thanks to [Dr. Chiraag Lala](https://www.linkedin.com/in/chiraagrlala/) for his explanation of the concept. 
+Thanks to [Dr. Chiraag Lala](https://www.linkedin.com/in/chiraagrlala/) for his explanation of the concepts and ideas used throughout. 
 
 Some links to resources I used for inspiration, and research: 
 * [nuric Blog](https://www.doc.ic.ac.uk/~nuric/posts/teaching/word-representations/)
